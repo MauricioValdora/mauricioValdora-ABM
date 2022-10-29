@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "validaciones.h"
 
 int myGets(char* cadena, int longitud)
@@ -148,3 +149,72 @@ int getString(char *pBuffer, int limite)
     }
     return retorno;
 }
+
+int input_GetFloat(float* pResult, char* message, char* errorMessage, float min, float max, int retries)
+  {
+      float bufferFloat;
+      int retorno = -1;
+      while(retries>0)
+      {
+          retries--;
+          printf("%s",message);
+          if(getFloat(&bufferFloat) == 0)
+          {
+              if(bufferFloat >= min && bufferFloat <= max)
+              {
+                  *pResult = bufferFloat;
+                  retorno = 0;
+                  break;
+              }
+          }
+          printf("%s",errorMessage);
+      }
+      return retorno;
+  }
+
+  int getFloat(float* pResult)
+  {
+      int retorno=-1;
+      char buffer[64];
+      if(pResult != NULL)
+      {
+          if(myGets(buffer,sizeof(buffer))==0 && esFlotante(buffer))
+          {
+              *pResult = atof(buffer);
+              retorno = 0;
+          }
+      }
+
+      return retorno;
+  }
+
+  int esFlotante(char *str) {
+      int rtn = -1;
+      int longitud = strlen(str);
+      while (longitud > 0 && isspace(str[longitud - 1]))
+          longitud--;
+      if (longitud <= 0) return 0;
+      int i;
+      int haEncontradoElPunto = 0;
+      for (i = 0; i < longitud; ++i) {
+          if (str[i] == '-' && i > 0) {
+              rtn = 0;
+              break;
+          }
+          if (str[i] == '.') {
+              if (haEncontradoElPunto) {
+                  rtn = 0;
+                  break;
+              } else {
+
+                  haEncontradoElPunto = 1;
+              }
+          }
+          if (!isdigit(str[i]) && str[i] != '-' && str[i] != '.') {
+              rtn = 0;
+              break;
+          }
+      }
+      return rtn;
+  }
+

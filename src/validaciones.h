@@ -15,6 +15,7 @@ int getInt(int* pResultado);
 int isValidNombre(char *pBuffer, int limite);
 int utn_getNombre(  char *pNombre, int limite, char *mensaje, char *mensajeError, int reintentos);
 int getString(char *pBuffer, int limite);
-
-
+int input_GetFloat(float* pResult, char* message, char* errorMessage, float min, float max, int retries);
+int getFloat(float* pResult);
+int esFlotante(char *str) ;
 #endif /* VALIDACIONES_H_ */
